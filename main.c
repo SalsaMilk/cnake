@@ -7,9 +7,11 @@
 #include "SDL/SDL_image.h"
 
 #define HEAD (*(snake))
+#define KEY event.key.keysym.scancode
+
+#define SPEED 1
 #define BOARD_WIDTH 25
 #define BOARD_HEIGHT 20
-#define KEY event.key.keysym.scancode
 
 typedef char BYTE;
 typedef unsigned char UBYTE;
@@ -27,7 +29,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    //TTF_Init();
+    TTF_Init();
 
     //TTF_Font* font = TTF_OpenFont("fonts/bebas.ttf", 25);
 
@@ -92,7 +94,7 @@ int main(int argc, char *argv[]) {
                             }
                             break;
                         case SDL_SCANCODE_C: // Cheat codes (:
-                            length++;
+                            length += 10;
                             break;
                         case SDL_SCANCODE_ESCAPE:
                             shouldClose++;
@@ -106,8 +108,18 @@ int main(int argc, char *argv[]) {
 
         if (!memcmp(&HEAD, &apple, sizeof(SDL_Rect))) {
             length++;
-            apple.x = (rand() % BOARD_WIDTH)  * 22;
-            apple.y = (rand() % BOARD_HEIGHT) * 22;
+            for (;;) { // Ensure apple doesn't spawn in snake
+                BYTE appleInSnake = 0;
+                apple.x = (rand() % BOARD_WIDTH) * 22;
+                apple.y = (rand() % BOARD_HEIGHT) * 22;
+                for (int i = 0; i < length; i++) {
+                    if(!memcmp(&apple, (snake + i), sizeof(SDL_Rect))) {
+                        appleInSnake = 1;
+                        break;
+                    }
+                }
+                if (!appleInSnake) break;
+            }
         }
 
         SDL_Rect prev = HEAD, next;
@@ -136,9 +148,9 @@ int main(int argc, char *argv[]) {
         SDL_SetRenderDrawColor(renderer, 15, 15, 15, 255);
 
         // Draw background
-        bg.y = 0;
+        bg.y = 1;
         for (BYTE j = 0; j < BOARD_HEIGHT; j++) {
-            bg.x = 0;
+            bg.x = 1;
             for (BYTE k = 0; k < BOARD_WIDTH; k++) {
                 SDL_RenderFillRect(renderer, &bg);
                 bg.x += 22;
@@ -158,7 +170,7 @@ int main(int argc, char *argv[]) {
 
         SDL_RenderPresent(renderer);
 
-        SDL_Delay(100);
+        SDL_Delay(100/SPEED);
     }
 
     //TTF_CloseFont(font);

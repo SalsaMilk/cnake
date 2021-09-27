@@ -58,19 +58,19 @@ include CMakeFiles\cnake.dir\flags.make
 CMakeFiles\cnake.dir\main.c.obj: CMakeFiles\cnake.dir\flags.make
 CMakeFiles\cnake.dir\main.c.obj: ..\main.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\mitch\Documents\GitHub\cnake\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/cnake.dir/main.c.obj"
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx64\x64\cl.exe @<<
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x64\cl.exe @<<
  /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoCMakeFiles\cnake.dir\main.c.obj /FdCMakeFiles\cnake.dir\ /FS -c C:\Users\mitch\Documents\GitHub\cnake\main.c
 <<
 
 CMakeFiles\cnake.dir\main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/cnake.dir/main.c.i"
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx64\x64\cl.exe > CMakeFiles\cnake.dir\main.c.i @<<
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x64\cl.exe > CMakeFiles\cnake.dir\main.c.i @<<
  /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\mitch\Documents\GitHub\cnake\main.c
 <<
 
 CMakeFiles\cnake.dir\main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/cnake.dir/main.c.s"
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx64\x64\cl.exe @<<
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x64\cl.exe @<<
  /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoNUL /FAs /FaCMakeFiles\cnake.dir\main.c.s /c C:\Users\mitch\Documents\GitHub\cnake\main.c
 <<
 
@@ -90,7 +90,7 @@ cnake.exe: ..\lib\SDL2main.lib
 cnake.exe: ..\lib\SDL2test.lib
 cnake.exe: CMakeFiles\cnake.dir\objects1.rsp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\mitch\Documents\GitHub\cnake\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable cnake.exe"
-	C:\Users\mitch\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\212.5284.51\bin\cmake\win\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cnake.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100183~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100183~1.0\x64\mt.exe --manifests -- C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cnake.dir\objects1.rsp @<<
+	C:\Users\mitch\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\212.5284.51\bin\cmake\win\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cnake.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100183~1.0\x86\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100183~1.0\x86\mt.exe --manifests -- C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cnake.dir\objects1.rsp @<<
  /out:cnake.exe /implib:cnake.lib /pdb:C:\Users\mitch\Documents\GitHub\cnake\cmake-build-debug\cnake.pdb /version:0.0 /machine:x64 /debug /INCREMENTAL /subsystem:console  ..\lib\SDL2.lib ..\lib\SDL2_image.lib ..\lib\SDL2_ttf.lib ..\lib\SDL2main.lib ..\lib\SDL2test.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib 
 <<
 

@@ -11,4 +11,3 @@ file(GLOB LIBS
         lib/*.lib)
 
 target_link_libraries(cnake ${LIBS})
-message(fuck)
