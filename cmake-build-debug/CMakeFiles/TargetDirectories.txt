@@ -1,0 +1,3 @@
+C:/Users/mitch/Documents/GitHub/cnake/cmake-build-debug/CMakeFiles/cnake.dir
+C:/Users/mitch/Documents/GitHub/cnake/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/mitch/Documents/GitHub/cnake/cmake-build-debug/CMakeFiles/rebuild_cache.dir
