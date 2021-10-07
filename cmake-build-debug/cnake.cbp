@@ -86,7 +86,13 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/mitch/Documents/GitHub/cnake/button.h">
+			<Option target="cnake"/>
+		</Unit>
 		<Unit filename="C:/Users/mitch/Documents/GitHub/cnake/main.c">
+			<Option target="cnake"/>
+		</Unit>
+		<Unit filename="C:/Users/mitch/Documents/GitHub/cnake/menus.h">
 			<Option target="cnake"/>
 		</Unit>
 		<Unit filename="C:/Users/mitch/Documents/GitHub/cnake/CMakeLists.txt">

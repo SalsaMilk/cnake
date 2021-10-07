@@ -51,5 +51,7 @@ CMakeFiles\cnake.dir\main.c.obj: ..\SDL\SDL_version.h
 CMakeFiles\cnake.dir\main.c.obj: ..\SDL\SDL_video.h
 CMakeFiles\cnake.dir\main.c.obj: ..\SDL\begin_code.h
 CMakeFiles\cnake.dir\main.c.obj: ..\SDL\close_code.h
+CMakeFiles\cnake.dir\main.c.obj: ..\button.h
 CMakeFiles\cnake.dir\main.c.obj: ..\main.c
+CMakeFiles\cnake.dir\main.c.obj: ..\menus.h
 
