@@ -10,36 +10,81 @@
 #define HEAD snake[0]
 
 #define SPEED 10.0f
-#define SCALE 20
+#define SCALE 26
 #define GAP 1
-#define BOARD_WIDTH 20
+#define BOARD_WIDTH 30
 #define BOARD_HEIGHT 20
 #define WINDOW_WIDTH (unitConst * (BOARD_WIDTH + 2))
 #define WINDOW_HEIGHT (unitConst * (BOARD_HEIGHT + 2))
 
+SDL_Window* win;
 SDL_Color white = {255, 255, 255};
 SDL_Renderer* renderer;
 TTF_Font *font, *fontBig, *fontHuge;
 SDL_Event event;
-BYTE gaming = 1;
+BYTE gaming = 1, goldenApple = 0, dead;
 
 #include "button.h"
-#include "menus.h"
+#include "menu.h"
 
 SDL_Point direction = {0, 0};
+SDL_Rect bg = {SCALE, SCALE + 1, SCALE, SCALE};
 int score, length, unitConst = SCALE + GAP;
-SDL_Rect* snake;
-char* scoreCounter;
+SDL_Rect* snake, scoreRect = {0, 0, 0, 0};;
+char* scoreCounter = "Score: 000";
+SDL_Texture* scoreTexture, *appleTexture, *goldAppleTexture;
 SDL_Rect apple;
 
 void setup() {
     gaming = 1;
     length = 1;
     score = 0;
+    dead = 0;
     snake = calloc(BOARD_WIDTH * BOARD_HEIGHT, sizeof(SDL_Rect));
     apple.x = unitConst * BOARD_WIDTH/2;
     apple.y = unitConst * BOARD_HEIGHT/2;
     scoreCounter = "Score: 000";
+    scoreTexture = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, scoreCounter, white));
+    HEAD.x = unitConst; HEAD.y = unitConst;
+    HEAD.w = SCALE; HEAD.h = SCALE;
+    direction.x = 0;
+    direction.y = 0;
+}
+
+void draw() {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+    // clear the screen
+    SDL_RenderClear(renderer);
+
+    SDL_SetRenderDrawColor(renderer, 15, 15, 15, 255);
+
+    // Draw background
+    bg.y = unitConst + 1;
+    for (BYTE j = 0; j < BOARD_HEIGHT; j++) {
+        bg.x = unitConst;
+        for (BYTE k = 0; k < BOARD_WIDTH; k++) {
+            SDL_RenderFillRect(renderer, &bg);
+            bg.x += unitConst;
+        }
+        bg.y += unitConst;
+    }
+
+    SDL_SetRenderDrawColor(renderer, 255, 215 * goldenApple, 0, 255);
+
+    // Render the apple
+    if(!goldenApple)
+        SDL_RenderCopy(renderer, appleTexture, NULL, &apple);
+    else SDL_RenderCopy(renderer, goldAppleTexture, NULL, &apple);
+
+    SDL_SetRenderDrawColor(renderer, 255 * dead, 255, 255, 255);
+
+    // Render entire snake with a single sexy SDL function
+    SDL_RenderFillRects(renderer, snake, length);
+
+    SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
+
+    SDL_RenderPresent(renderer);
 }
 
 int main(int argc, char *argv[]) {
@@ -54,50 +99,45 @@ int main(int argc, char *argv[]) {
 
     TTF_Init();
 
-    SDL_Window* win = SDL_CreateWindow("cnake",
-                                       SDL_WINDOWPOS_CENTERED, // x
-                                       SDL_WINDOWPOS_CENTERED, // y
-                                       WINDOW_WIDTH,  // w
-                                       WINDOW_HEIGHT, // h
-                                       0); // flag
+    win = SDL_CreateWindow("cnake",
+                           SDL_WINDOWPOS_CENTERED, // x
+                           SDL_WINDOWPOS_CENTERED, // y
+                           WINDOW_WIDTH,  // w
+                           WINDOW_HEIGHT, // h
+                           0); // flag
 
-    Uint32 render_flags = SDL_RENDERER_ACCELERATED;
-    renderer = SDL_CreateRenderer(win, -1, render_flags);
+    renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    font = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE);
+    font = TTF_OpenFont("..\\fonts\\simplifica.ttf", SCALE);
     fontBig = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE * 2);
-    fontHuge = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE * 10);
+    fontHuge = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE * 5);
 
-    SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, scoreCounter, white));
-    SDL_Texture* appleTexture = IMG_LoadTexture(renderer, "..\\images\\apple.png");
-    SDL_Texture* goldAppleTexture = IMG_LoadTexture(renderer, "..\\images\\apple_gold.png");
+    scoreTexture = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, scoreCounter, white));
+    appleTexture = IMG_LoadTexture(renderer, "..\\images\\apple.png");
+    goldAppleTexture = IMG_LoadTexture(renderer, "..\\images\\apple_gold.png");
 
-    SDL_Rect scoreRect = {0, 0, 0, 0};
     SDL_QueryTexture(scoreTexture, NULL, NULL, &scoreRect.w, &scoreRect.h);
 
-    // Pause menu buttons
-    button_pause_resume = button_new(WINDOW_WIDTH >> 1, 2 * SCALE, "Resume", 20, 20, 20, 150);
-    button_pause_settings = button_new(WINDOW_WIDTH >> 1, 5 * SCALE, "Settings", 20, 20, 20, 150);
-    button_pause_exit = button_new(WINDOW_WIDTH >> 1, 8 * SCALE, "Exit", 60, 20, 20, 150);
+    // Pause menu
+    button_pause_resume = button_new(WINDOW_WIDTH / 2, 2 * SCALE, "Resume", 20, 20, 20, 150);
+    button_pause_settings = button_new(WINDOW_WIDTH / 2, 5 * SCALE, "Settings", 20, 20, 20, 150);
+    button_pause_exit = button_new(WINDOW_WIDTH / 2, 8 * SCALE, "Exit", 60, 20, 20, 150);
 
-    SDL_Rect bg = {SCALE, SCALE + 1, SCALE, SCALE};
+    // Death menu
+    youDiedTexture = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(fontHuge, "YOU DIED", white));
+    SDL_QueryTexture(youDiedTexture, NULL, NULL, &youDiedRect.w, &youDiedRect.h);
+    youDiedRect.x = WINDOW_WIDTH / 2 - youDiedRect.w / 2;
+    youDiedRect.y = SCALE;
+    button_death_retry = button_new(WINDOW_WIDTH / 2, 7 * SCALE, "Retry", 20, 20, 20, 150);
+    button_death_exit = button_new(WINDOW_WIDTH / 2, 10 * SCALE, "Exit", 60, 20, 20, 150);
 
     START:
 
     setup();
 
-    HEAD.x = unitConst; HEAD.y = unitConst;
-    HEAD.w = SCALE; HEAD.h = SCALE;
-
-    // Small chance to generate a "golden apple" which adds 5 to the length
-    BYTE goldenApple = 0;
-
     // main game loop
     while (gaming) {
-        //BYTE* keyBuf = malloc(8); // 1 - up  |  2 - down  |  3 - left  |  4 - right
-        //BYTE keysInBuf = 0;
-
         // Events management
         if (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -142,6 +182,7 @@ int main(int argc, char *argv[]) {
                             break;
                         case SDL_SCANCODE_P:
                         case SDL_SCANCODE_ESCAPE:
+                            draw();
                             menu_pause();
                             break;
                         default:
@@ -181,8 +222,13 @@ int main(int argc, char *argv[]) {
 
         // Make snake follow head
         for (int i = 1; i < length; i++) {
-            if (!memcmp(&HEAD, (snake + i), 8))
-                gaming = 0;
+            if (!memcmp(&HEAD, (snake + i), 8)) {
+                dead = 1;
+                draw();
+                menu_death();
+                if (gaming) setup();
+                else break;
+            }
             next        = snake[i];
             snake[i]    = prev;
             prev        = next;
@@ -192,49 +238,15 @@ int main(int argc, char *argv[]) {
         if ((HEAD.x + HEAD.w > (BOARD_WIDTH + 1) * unitConst) ||
             (HEAD.x < unitConst) ||
             (HEAD.y + HEAD.h > (BOARD_HEIGHT + 1) * unitConst) ||
-            (HEAD.y < unitConst))
-            gaming = 0;
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-        // clear the screen
-        SDL_RenderClear(renderer);
-
-        SDL_SetRenderDrawColor(renderer, 15, 15, 15, 255);
-
-        // Draw background
-        if(GAP) {
-            bg.y = unitConst + 1;
-            for (BYTE j = 0; j < BOARD_HEIGHT; j++) {
-                bg.x = unitConst;
-                for (BYTE k = 0; k < BOARD_WIDTH; k++) {
-                    SDL_RenderFillRect(renderer, &bg);
-                    bg.x += unitConst;
-                }
-                bg.y += unitConst;
-            }
-        }
-        else {
-            bg.w = BOARD_WIDTH * SCALE;
-            bg.h = BOARD_HEIGHT * SCALE;
-            SDL_RenderFillRect(renderer, &bg);
+            (HEAD.y < unitConst)) {
+            dead = 1;
+            draw();
+            menu_death();
+            if (gaming) setup();
+            else break;
         }
 
-        SDL_SetRenderDrawColor(renderer, 255, 215 * goldenApple, 0, 255);
-
-        // Render the apple
-        if(!goldenApple)
-            SDL_RenderCopy(renderer, appleTexture, NULL, &apple);
-        else SDL_RenderCopy(renderer, goldAppleTexture, NULL, &apple);
-
-        SDL_SetRenderDrawColor(renderer, 255 * !gaming, 255, 255, 255);
-
-        // Render entire snake with a single sexy SDL function
-        SDL_RenderFillRects(renderer, snake, length);
-
-        SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
-
-        SDL_RenderPresent(renderer);
+        draw();
 
         SDL_Delay(100/(SPEED/10.0f));
     }
@@ -249,12 +261,15 @@ int main(int argc, char *argv[]) {
     DestroyButton(button_pause_exit);
 
     // Free game stuff
+    SDL_DestroyTexture(youDiedTexture);
+
     SDL_DestroyTexture(appleTexture);
     SDL_DestroyTexture(goldAppleTexture);
     SDL_DestroyTexture(scoreTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(win);
 
+    free(snake);
 
     TTF_Quit();
     SDL_Quit();

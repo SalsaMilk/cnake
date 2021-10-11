@@ -5,15 +5,11 @@ set(CMAKE_C_STANDARD 99)
 
 include_directories("${PROJECT_SOURCE_DIR}/lib")
 
-add_executable(cnake main.c button.h menus.h)
+add_executable(cnake main.c button.h menu.h)
 
 file(GLOB LIBS
         lib/*.lib)
 
-target_include_directories(cnake PRIVATE
-        lib)
-
 target_link_libraries(cnake
         ${LIBS}
-        lib/*.dll
 )
