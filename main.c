@@ -45,8 +45,8 @@ void setup() {
     apple.y = unitConst * BOARD_HEIGHT/2;
     scoreCounter = "Score: 000";
     scoreTexture = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, scoreCounter, white));
-    HEAD.x = unitConst; HEAD.y = unitConst;
     HEAD.w = SCALE; HEAD.h = SCALE;
+    HEAD.x = SCALE+1; HEAD.y = SCALE+1;
     direction.x = 0;
     direction.y = 0;
 }
@@ -77,7 +77,7 @@ void draw() {
         SDL_RenderCopy(renderer, appleTexture, NULL, &apple);
     else SDL_RenderCopy(renderer, goldAppleTexture, NULL, &apple);
 
-    SDL_SetRenderDrawColor(renderer, 255 * dead, 255, 255, 255);
+    SDL_SetRenderDrawColor(renderer, 255 * dead, 255 * !dead, 255 * !dead, 255);
 
     // Render entire snake with a single sexy SDL function
     SDL_RenderFillRects(renderer, snake, length);
@@ -109,28 +109,28 @@ int main(int argc, char *argv[]) {
     renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    font = TTF_OpenFont("..\\fonts\\simplifica.ttf", SCALE);
-    fontBig = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE * 2);
-    fontHuge = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE * 5);
+    font        = TTF_OpenFont("..\\fonts\\inconsolata.ttf", SCALE);
+    fontBig     = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE * 2);
+    fontHuge    = TTF_OpenFont("..\\fonts\\envy.ttf", SCALE * 5);
 
-    scoreTexture = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, scoreCounter, white));
-    appleTexture = IMG_LoadTexture(renderer, "..\\images\\apple.png");
-    goldAppleTexture = IMG_LoadTexture(renderer, "..\\images\\apple_gold.png");
+    scoreTexture        = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(font, scoreCounter, white));
+    appleTexture        = IMG_LoadTexture(renderer, "..\\images\\apple.png");
+    goldAppleTexture    = IMG_LoadTexture(renderer, "..\\images\\apple_gold.png");
 
     SDL_QueryTexture(scoreTexture, NULL, NULL, &scoreRect.w, &scoreRect.h);
 
     // Pause menu
-    button_pause_resume = button_new(WINDOW_WIDTH / 2, 2 * SCALE, "Resume", 20, 20, 20, 150);
-    button_pause_settings = button_new(WINDOW_WIDTH / 2, 5 * SCALE, "Settings", 20, 20, 20, 150);
-    button_pause_exit = button_new(WINDOW_WIDTH / 2, 8 * SCALE, "Exit", 60, 20, 20, 150);
+    button_pause_resume     = button_new(WINDOW_WIDTH / 2, 2 * SCALE, "Resume", 20, 20, 20, 150);
+    button_pause_settings   = button_new(WINDOW_WIDTH / 2, 5 * SCALE, "Settings", 20, 20, 20, 150);
+    button_pause_exit       = button_new(WINDOW_WIDTH / 2, 8 * SCALE, "Exit", 60, 20, 20, 150);
 
     // Death menu
-    youDiedTexture = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(fontHuge, "YOU DIED", white));
+    youDiedTexture      = SDL_CreateTextureFromSurface(renderer, TTF_RenderText_Solid(fontHuge, "YOU DIED", white));
     SDL_QueryTexture(youDiedTexture, NULL, NULL, &youDiedRect.w, &youDiedRect.h);
-    youDiedRect.x = WINDOW_WIDTH / 2 - youDiedRect.w / 2;
-    youDiedRect.y = SCALE;
-    button_death_retry = button_new(WINDOW_WIDTH / 2, 7 * SCALE, "Retry", 20, 20, 20, 150);
-    button_death_exit = button_new(WINDOW_WIDTH / 2, 10 * SCALE, "Exit", 60, 20, 20, 150);
+    youDiedRect.x       = WINDOW_WIDTH / 2 - youDiedRect.w / 2;
+    youDiedRect.y       = SCALE;
+    button_death_retry  = button_new(WINDOW_WIDTH / 2, 7 * SCALE, "Retry", 20, 20, 20, 150);
+    button_death_exit   = button_new(WINDOW_WIDTH / 2, 10 * SCALE, "Exit", 60, 20, 20, 150);
 
     START:
 

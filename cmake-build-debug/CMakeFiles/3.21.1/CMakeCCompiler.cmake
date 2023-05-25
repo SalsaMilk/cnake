@@ -9,6 +9,8 @@ set(CMAKE_C_COMPILE_FEATURES "c_std_90;c_std_99;c_std_11;c_function_prototypes;c
 set(CMAKE_C90_COMPILE_FEATURES "c_std_90;c_function_prototypes")
 set(CMAKE_C99_COMPILE_FEATURES "c_std_99;c_variadic_macros;c_restrict")
 set(CMAKE_C11_COMPILE_FEATURES "c_std_11;c_static_assert")
+set(CMAKE_C17_COMPILE_FEATURES "")
+set(CMAKE_C23_COMPILE_FEATURES "")
 
 set(CMAKE_C_PLATFORM_ID "Windows")
 set(CMAKE_C_SIMULATE_ID "")
